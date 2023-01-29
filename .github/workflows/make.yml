@@ -26,7 +26,6 @@ jobs:
         msystem: ${{ matrix.msys }}
         install: make
     - name: Build
-      working-directory: ${{runner.workspace}}
       shell: msys2 {0}
       run: make mode=release
     - name: Upload
