@@ -1,0 +1,43 @@
+name: Make
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  msvc:
+    strategy:
+      matrix:
+        include:
+          - msys: mingw32
+            vmimage: windows-2022
+          # - msys: mingw64
+          #   vmimage: windows-2022
+
+    name: ${{ matrix.msys }}
+    runs-on: ${{ matrix.vmimage }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.msys }}
+        pacboy: |
+          make:
+          gcc:p
+    - name: Build
+      shell: msys2 {0}
+      run: make mode=release
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: UniversalSpeech-${{ matrix.msys }}
+        path: |
+          UniversalSpeech.dll
+          libUniversalSpeech.a
+          bin/
+          include/
+          *.txt 
+          *.md 
