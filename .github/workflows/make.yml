@@ -24,7 +24,9 @@ jobs:
       uses: msys2/setup-msys2@v2
       with:
         msystem: ${{ matrix.msys }}
-        install: make
+        pacboy: |
+          make:
+          gcc:p
     - name: Build
       shell: msys2 {0}
       run: make mode=release
