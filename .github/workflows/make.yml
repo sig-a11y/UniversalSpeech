@@ -11,21 +11,20 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: Mingw-w64-x86
+          - msys: mingw32
             vmimage: windows-2022
-            msys: mingw32
-          # - name: Mingw-w64-x64
+          # - msys: mingw64
           #   vmimage: windows-2022
-          #   msys: mingw64
 
+    name: ${{ matrix.msys }}
     runs-on: ${{ matrix.vmimage }}
-    name: ${{ matrix.name }}
     steps:
     - uses: actions/checkout@v3
     - name: Setup MSYS2
       uses: msys2/setup-msys2@v2
       with:
         msystem: ${{ matrix.msys }}
+        pacboy: make:p
     - name: Build
       shell: msys2 {0}
       run: make mode=release
